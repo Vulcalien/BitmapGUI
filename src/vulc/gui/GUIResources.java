@@ -6,8 +6,12 @@ public abstract class GUIResources {
 
 	public static Font defaultFont;
 
+	public static void init(Font font) {
+		defaultFont = font;
+	}
+
 	public static void init() {
-		defaultFont = new Font(GUIPanel.class.getResourceAsStream("/vulc/gui/fonts/tinyfont.fv4"));
+		init(new Font(GUIPanel.class.getResourceAsStream("/vulc/gui/fonts/tinyfont.fv4")));
 	}
 
 }

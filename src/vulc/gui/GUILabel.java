@@ -1,11 +1,14 @@
 package vulc.gui;
 
 import vulc.bitmap.Bitmap;
+import vulc.bitmap.font.Font;
 
 public class GUILabel extends GUIComponent {
 
 	public String text = "";
 	public int textColor = 0;
+
+	public Font font;
 
 	public Bitmap<Boolean> boolImage;
 	public int colorAsBool;
@@ -14,6 +17,8 @@ public class GUILabel extends GUIComponent {
 
 	public GUILabel(int x, int y, int w, int h) {
 		super(x, y, w, h);
+
+		font = GUIResources.defaultFont;
 	}
 
 	public void setImage(Bitmap<Boolean> image, int color) {
@@ -31,7 +36,7 @@ public class GUILabel extends GUIComponent {
 
 	public void render(Bitmap<Integer> screen) {
 		super.render(screen);
-		screen.write(text, textColor, x + 1, y + (h - screen.getFont().getHeight()) / 2);
+		font.write(screen, text, textColor, x + 1, y + (h - font.getHeight()) / 2);
 
 		if(boolImage != null) {
 			screen.drawBool(boolImage, colorAsBool,

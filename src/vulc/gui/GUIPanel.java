@@ -14,7 +14,6 @@ public class GUIPanel extends GUIComponent {
 	public GUIPanel(int x, int y, int w, int h) {
 		super(x, y, w, h);
 		this.screen = new IntBitmap(w, h);
-		screen.setFont(GUIResources.defaultFont);
 	}
 
 	public void tick() {
