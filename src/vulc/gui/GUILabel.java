@@ -5,7 +5,12 @@ import vulc.bitmap.font.Font;
 
 public class GUILabel extends GUIComponent {
 
+	public static final int LEFT = 0, TOP = 0;
+	public static final int CENTER = 1, MIDDLE = 1;
+	public static final int RIGHT = 2, BOTTOM = 2;
+
 	public String text = "";
+	public int xAlign = LEFT, yAlign = MIDDLE;
 	public int textColor = 0;
 
 	public Font font;
@@ -36,7 +41,17 @@ public class GUILabel extends GUIComponent {
 
 	public void render(Bitmap<Integer> screen) {
 		super.render(screen);
-		font.write(screen, text, textColor, x + 1, y + (h - font.getHeight()) / 2);
+		int xOffset = 0, yOffset = 0;
+
+		if(xAlign == LEFT) xOffset = 1;
+		else if(xAlign == CENTER) xOffset = (w - font.widthOf(text)) / 2;
+		else if(xAlign == RIGHT) xOffset = w - font.widthOf(text) - 1;
+
+		if(yAlign == TOP) yOffset = 1;
+		else if(yAlign == MIDDLE) yOffset = (h - font.getHeight()) / 2;
+		else if(yAlign == BOTTOM) yOffset = h - font.getHeight() - 1;
+
+		font.write(screen, text, textColor, x + xOffset, y + yOffset);
 
 		if(boolImage != null) {
 			screen.drawBool(boolImage, colorAsBool,
