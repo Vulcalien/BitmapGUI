@@ -110,6 +110,10 @@ public class GUIMainPanel extends GUIPanel {
 		}
 	}
 
+	public void render() {
+		super.render(null);
+	}
+
 //	public void removeInputListeners() {
 //		Console console = Console.instance;
 //

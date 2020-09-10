@@ -26,7 +26,7 @@ public class GUIPanel extends GUIComponent {
 	public void render(Bitmap<Integer> screen) {
 		this.screen.clear(background);
 		drawComponents();
-		screen.draw(this.screen, x, y);
+		if(screen != null) screen.draw(this.screen, x, y);
 	}
 
 	protected void drawComponents() {
