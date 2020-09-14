@@ -35,13 +35,13 @@ public class GUIComponent {
 		return x >= 0 && x < w && y >= 0 && y < h;
 	}
 
-	public void onMouseDown(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse, int button) {
 	}
 
-	public void onMousePress(int xMouse, int yMouse) {
+	public void onMousePress(int xMouse, int yMouse, int button) {
 	}
 
-	public void onMouseRelease(int xMouse, int yMouse) {
+	public void onMouseRelease(int xMouse, int yMouse, int button) {
 	}
 
 	public void onMouseInside(int xMouse, int yMouse) {

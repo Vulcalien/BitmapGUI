@@ -10,15 +10,15 @@ public class GUIButton extends GUILabel {
 		super(x, y, w, h);
 	}
 
-	public void onMouseDown(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse, int button) {
 		if(onMouseDownAction != null) onMouseDownAction.run();
 	}
 
-	public void onMousePress(int xMouse, int yMouse) {
+	public void onMousePress(int xMouse, int yMouse, int button) {
 		if(onMousePressAction != null) onMousePressAction.run();
 	}
 
-	public void onMouseRelease(int xMouse, int yMouse) {
+	public void onMouseRelease(int xMouse, int yMouse, int button) {
 		if(onMouseReleaseAction != null) onMouseReleaseAction.run();
 	}
 

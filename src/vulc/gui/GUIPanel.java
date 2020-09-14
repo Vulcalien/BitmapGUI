@@ -44,7 +44,7 @@ public class GUIPanel extends GUIComponent {
 		comps.remove(comp);
 	}
 
-	public void onMouseDown(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse, int button) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
@@ -57,7 +57,7 @@ public class GUIPanel extends GUIComponent {
 					comp.focused = true;
 					comp.onGainFocus();
 				}
-				comp.onMouseDown(xr, yr);
+				comp.onMouseDown(xr, yr, button);
 			} else {
 				if(comp.focused) {
 					comp.focused = false;
@@ -67,7 +67,7 @@ public class GUIPanel extends GUIComponent {
 		}
 	}
 
-	public void onMousePress(int xMouse, int yMouse) {
+	public void onMousePress(int xMouse, int yMouse, int button) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
@@ -76,12 +76,12 @@ public class GUIPanel extends GUIComponent {
 			int yr = yMouse - comp.y;
 
 			if(comp.isPointInside(xr, yr)) {
-				comp.onMousePress(xr, yr);
+				comp.onMousePress(xr, yr, button);
 			}
 		}
 	}
 
-	public void onMouseRelease(int xMouse, int yMouse) {
+	public void onMouseRelease(int xMouse, int yMouse, int button) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
@@ -90,7 +90,7 @@ public class GUIPanel extends GUIComponent {
 			int yr = yMouse - comp.y;
 
 			if(comp.isPointInside(xr, yr)) {
-				comp.onMouseRelease(xr, yr);
+				comp.onMouseRelease(xr, yr, button);
 			}
 		}
 	}

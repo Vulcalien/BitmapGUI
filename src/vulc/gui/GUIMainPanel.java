@@ -1,42 +1,21 @@
 package vulc.gui;
 
 import java.awt.Component;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import vulc.gui.input.GuiInputHandler;
-import vulc.gui.input.GuiInputHandler.Key;
-import vulc.gui.input.GuiInputHandler.KeyType;
 
 public class GUIMainPanel extends GUIPanel {
 
 	public final GuiInputHandler input = new GuiInputHandler();
+	public final List<Integer> mouseDownButtons = new ArrayList<Integer>();
 
 	// screen's properties
 	public int xOffset, yOffset; 				// where it gets rendered (relative to component's (0; 0) corner)
-	public int scrWidth, scrHeight;				// width and height 
+	public int scrWidth, scrHeight;				// width and height
 	public int scrScaledWidth, scrScaledHeight;	// scaled width and height, when they are rendered
-
-	private final List<Character> keyBuffer = new ArrayList<Character>();
-	private final KeyAdapter keyListener = new KeyAdapter() {
-		public void keyPressed(KeyEvent e) {
-			keyBuffer.add(e.getKeyChar());
-		}
-	};
-
-	private final Key mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
-
-	private int wheelRotCount = 0;
-	private final MouseWheelListener wheelListener = new MouseWheelListener() {
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			wheelRotCount += e.getWheelRotation();
-		}
-	};
 
 	public GUIMainPanel(int x, int y, int w, int h) {
 		super(x, y, w, h);
@@ -56,9 +35,6 @@ public class GUIMainPanel extends GUIPanel {
 		this.scrScaledHeight = scrScaledHeight;
 
 		input.init(component);
-
-		component.addKeyListener(keyListener);
-		component.addMouseWheelListener(wheelListener);
 	}
 
 	public void init(Component component,
@@ -72,41 +48,62 @@ public class GUIMainPanel extends GUIPanel {
 	public void tick() {
 		super.tick();
 
-		input.tick();
-
-		int xMouse = (input.xMouse - xOffset) * scrWidth / scrScaledWidth - this.x;
-		int yMouse = (input.yMouse - yOffset) * scrHeight / scrScaledHeight - this.y;
-
-		while(keyBuffer.size() != 0) {
-			char c = keyBuffer.remove(0);
-			this.onKeyPress(c);
-		}
-
-		if(mouse1.isKeyDown()) {
-			if(this.isPointInside(xMouse, yMouse)) {
-				this.onMouseDown(xMouse, yMouse);
+		synchronized(input.keyLock) {
+			while(input.keyPress.size() != 0) {
+				char c = input.keyPress.remove(0).getKeyChar();
+				this.onKeyPress(c);
 			}
 		}
 
-		if(mouse1.isPressed()) {
-			if(this.isPointInside(xMouse, yMouse)) {
-				this.onMousePress(xMouse, yMouse);
-			}
+		int xMouse, yMouse;
+		synchronized(input.mouseMotionLock) {
+			xMouse = (input.xMouse - xOffset) * scrWidth / scrScaledWidth - this.x;
+			yMouse = (input.yMouse - yOffset) * scrHeight / scrScaledHeight - this.y;
 		}
-		if(mouse1.isReleased()) {
-			if(this.isPointInside(xMouse, yMouse)) {
-				this.onMouseRelease(xMouse, yMouse);
+
+		synchronized(input.mouseLock) {
+			while(!input.mousePress.isEmpty()) {
+				MouseEvent e = input.mousePress.remove(0);
+
+				int xm = (e.getX() - xOffset) * scrWidth / scrScaledWidth - this.x;
+				int ym = (e.getY() - yOffset) * scrHeight / scrScaledHeight - this.y;
+
+				this.onMousePress(xm, ym, e.getButton());
+
+				if(!mouseDownButtons.contains(e.getButton())) {
+					mouseDownButtons.add(e.getButton());
+				}
+			}
+
+			for(int mouseButton : mouseDownButtons) {
+				if(this.isPointInside(xMouse, yMouse)) {
+					this.onMouseDown(xMouse, yMouse, mouseButton);
+				}
+			}
+
+			while(!input.mouseRelease.isEmpty()) {
+				MouseEvent e = input.mouseRelease.remove(0);
+
+				int xm = (e.getX() - xOffset) * scrWidth / scrScaledWidth - this.x;
+				int ym = (e.getY() - yOffset) * scrHeight / scrScaledHeight - this.y;
+
+				this.onMouseRelease(xm, ym, e.getButton());
+
+				if(mouseDownButtons.contains(e.getButton())) {
+					mouseDownButtons.remove((Object) e.getButton());
+				}
 			}
 		}
 
 		// do this even if isPointInside is false
 		this.onMouseInside(xMouse, yMouse);
 
-		if(wheelRotCount != 0) {
-			if(this.isPointInside(xMouse, yMouse)) {
-				this.onMouseScroll(xMouse, yMouse, wheelRotCount);
+		synchronized(input.mouseWheelLock) {
+			if(input.wheelRotCount != 0) {
+				this.onMouseScroll(xMouse, yMouse, input.wheelRotCount);
+
+				input.wheelRotCount = 0;
 			}
-			wheelRotCount = 0;
 		}
 	}
 
