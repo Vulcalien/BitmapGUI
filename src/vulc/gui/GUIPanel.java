@@ -150,6 +150,13 @@ public class GUIPanel extends GUIComponent {
 		}
 	}
 
+	public void onKeyRelease(char character) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+			comp.onKeyRelease(character);
+		}
+	}
+
 	public void onLostFocus() {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);

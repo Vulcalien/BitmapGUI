@@ -1,6 +1,7 @@
 package vulc.gui;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,16 @@ public class GUIMainPanel extends GUIPanel {
 		super.tick();
 
 		synchronized(input.keyLock) {
-			while(input.keyPress.size() != 0) {
-				char c = input.keyPress.remove(0).getKeyChar();
-				this.onKeyPress(c);
+			while(!input.keyPress.isEmpty()) {
+				KeyEvent key = input.keyPress.remove(0);
+
+				this.onKeyPress(key.getKeyChar());
+			}
+
+			while(!input.keyRelease.isEmpty()) {
+				KeyEvent key = input.keyRelease.remove(0);
+
+				this.onKeyRelease(key.getKeyChar());
 			}
 		}
 

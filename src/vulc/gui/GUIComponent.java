@@ -62,6 +62,9 @@ public class GUIComponent {
 	public void onKeyPress(char character) {
 	}
 
+	public void onKeyRelease(char character) {
+	}
+
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
 	}
 
