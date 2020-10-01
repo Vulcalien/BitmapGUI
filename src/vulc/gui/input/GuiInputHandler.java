@@ -21,8 +21,7 @@ public class GuiInputHandler implements KeyListener,
 	public final Object mouseMotionLock = new Object();
 	public final Object mouseWheelLock = new Object();
 
-	public final List<KeyEvent> keyPress = new ArrayList<KeyEvent>();
-	public final List<KeyEvent> keyRelease = new ArrayList<KeyEvent>();
+	public final List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
 
 	public final List<MouseEvent> mousePress = new ArrayList<MouseEvent>();
 	public final List<MouseEvent> mouseRelease = new ArrayList<MouseEvent>();
@@ -42,13 +41,13 @@ public class GuiInputHandler implements KeyListener,
 
 	public void keyPressed(KeyEvent e) {
 		synchronized(keyLock) {
-			keyPress.add(e);
+			keyEvents.add(e);
 		}
 	}
 
 	public void keyReleased(KeyEvent e) {
 		synchronized(keyLock) {
-			keyRelease.add(e);
+			keyEvents.add(e);
 		}
 	}
 

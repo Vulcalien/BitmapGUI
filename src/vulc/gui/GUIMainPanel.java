@@ -50,16 +50,14 @@ public class GUIMainPanel extends GUIPanel {
 		super.tick();
 
 		synchronized(input.keyLock) {
-			while(!input.keyPress.isEmpty()) {
-				KeyEvent key = input.keyPress.remove(0);
+			while(!input.keyEvents.isEmpty()) {
+				KeyEvent key = input.keyEvents.remove(0);
 
-				this.onKeyPress(key.getKeyChar());
-			}
-
-			while(!input.keyRelease.isEmpty()) {
-				KeyEvent key = input.keyRelease.remove(0);
-
-				this.onKeyRelease(key.getKeyChar());
+				if(key.getID() == KeyEvent.KEY_PRESSED) {
+					this.onKeyPress(key.getKeyChar());
+				} else if(key.getID() == KeyEvent.KEY_RELEASED) {
+					this.onKeyRelease(key.getKeyChar());
+				}
 			}
 		}
 
