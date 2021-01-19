@@ -16,10 +16,8 @@ public class GUIMainPanel extends GUIPanel {
 	public final GuiInputHandler input = new GuiInputHandler();
 	public final List<Integer> mouseDownButtons = new ArrayList<Integer>();
 
-	// screen's properties
-	public int xOffset, yOffset; 				// where it gets rendered (relative to component's (0; 0) corner)
-	public int scrWidth, scrHeight;				// width and height
-	public int scrScaledWidth, scrScaledHeight;	// scaled width and height, when they are rendered
+	// scaled width and height, when they are rendered
+	public int scrScaledWidth, scrScaledHeight;
 
 	// these are used to draw directly to a Graphics object
 	private BufferedImage img;
@@ -29,28 +27,15 @@ public class GUIMainPanel extends GUIPanel {
 		super(x, y, w, h);
 	}
 
-	public void init(Component component,
-	                 int xOffset, int yOffset,
-	                 int scrWidth, int scrHeight,
-	                 int scrScaledWidth, int scrScaledHeight) {
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
-
-		this.scrWidth = scrWidth;
-		this.scrHeight = scrHeight;
-
+	public void init(Component component, int scrScaledWidth, int scrScaledHeight) {
 		this.scrScaledWidth = scrScaledWidth;
 		this.scrScaledHeight = scrScaledHeight;
 
 		input.init(component);
 	}
 
-	public void init(Component component,
-	                 int scrWidth, int scrHeight) {
-		init(component,
-		     0, 0,
-		     scrWidth, scrHeight,
-		     scrWidth, scrHeight);
+	public void init(Component component) {
+		init(component, this.w, this.h);
 	}
 
 	public void tick() {
@@ -70,16 +55,16 @@ public class GUIMainPanel extends GUIPanel {
 
 		int xMouse, yMouse;
 		synchronized(input.mouseMotionLock) {
-			xMouse = (input.xMouse - xOffset) * scrWidth / scrScaledWidth - this.x;
-			yMouse = (input.yMouse - yOffset) * scrHeight / scrScaledHeight - this.y;
+			xMouse = (input.xMouse - this.x) * this.w / scrScaledWidth;
+			yMouse = (input.yMouse - this.y) * this.h / scrScaledHeight;
 		}
 
 		synchronized(input.mouseLock) {
 			while(!input.mousePress.isEmpty()) {
 				MouseEvent e = input.mousePress.remove(0);
 
-				int xm = (e.getX() - xOffset) * scrWidth / scrScaledWidth - this.x;
-				int ym = (e.getY() - yOffset) * scrHeight / scrScaledHeight - this.y;
+				int xm = (e.getX() - this.x) * this.w / scrScaledWidth;
+				int ym = (e.getY() - this.y) * this.h / scrScaledHeight;
 
 				this.onMousePress(xm, ym, e.getButton());
 
@@ -97,8 +82,8 @@ public class GUIMainPanel extends GUIPanel {
 			while(!input.mouseRelease.isEmpty()) {
 				MouseEvent e = input.mouseRelease.remove(0);
 
-				int xm = (e.getX() - xOffset) * scrWidth / scrScaledWidth - this.x;
-				int ym = (e.getY() - yOffset) * scrHeight / scrScaledHeight - this.y;
+				int xm = (e.getX() - this.x) * this.w / scrScaledWidth;
+				int ym = (e.getY() - this.x) * this.h / scrScaledHeight;
 
 				this.onMouseRelease(xm, ym, e.getButton());
 
@@ -128,7 +113,7 @@ public class GUIMainPanel extends GUIPanel {
 		this.render();
 
 		if(img == null || img.getWidth() != scrScaledWidth || img.getHeight() != scrScaledHeight) {
-			img = new BufferedImage(scrWidth, scrHeight, BufferedImage.TYPE_INT_RGB);
+			img = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_RGB);
 			imgPixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 		}
 
