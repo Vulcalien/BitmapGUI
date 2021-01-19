@@ -1,3 +1,7 @@
+/*
+ * Copyright 2019-2021 Vulcalien
+ * This code is licensed under MIT License by Vulcalien (see LICENSE)
+ */
 package vulc.gui;
 
 import java.awt.Component;
