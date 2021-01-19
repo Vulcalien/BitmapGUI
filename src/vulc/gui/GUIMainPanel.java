@@ -1,8 +1,11 @@
 package vulc.gui;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,10 @@ public class GUIMainPanel extends GUIPanel {
 	public int xOffset, yOffset; 				// where it gets rendered (relative to component's (0; 0) corner)
 	public int scrWidth, scrHeight;				// width and height
 	public int scrScaledWidth, scrScaledHeight;	// scaled width and height, when they are rendered
+
+	// these are used to draw directly to a Graphics object
+	private BufferedImage img;
+	private int[] imgPixels;
 
 	public GUIMainPanel(int x, int y, int w, int h) {
 		super(x, y, w, h);
@@ -115,6 +122,21 @@ public class GUIMainPanel extends GUIPanel {
 
 	public void render() {
 		super.render(null);
+	}
+
+	public void render(Graphics g) {
+		this.render();
+
+		if(img == null || img.getWidth() != scrScaledWidth || img.getHeight() != scrScaledHeight) {
+			img = new BufferedImage(scrWidth, scrHeight, BufferedImage.TYPE_INT_RGB);
+			imgPixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+		}
+
+		for(int i = 0; i < imgPixels.length; i++) {
+			imgPixels[i] = this.screen.raster.getPixel(i);
+		}
+
+		g.drawImage(img, x, y, scrScaledWidth, scrScaledHeight, null);
 	}
 
 //	public void removeInputListeners() {
