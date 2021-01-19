@@ -36,6 +36,13 @@ public class GuiInputHandler implements KeyListener,
 		component.addMouseWheelListener(this);
 	}
 
+	public void remove(Component component) {
+		component.removeKeyListener(this);
+		component.removeMouseListener(this);
+		component.removeMouseMotionListener(this);
+		component.removeMouseWheelListener(this);
+	}
+
 	public void keyTyped(KeyEvent e) {
 	}
 

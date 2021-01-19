@@ -17,11 +17,11 @@ import vulc.gui.input.GuiInputHandler;
 
 public class GUIMainPanel extends GUIPanel {
 
-	public final GuiInputHandler input = new GuiInputHandler();
-	public final List<Integer> mouseDownButtons = new ArrayList<Integer>();
-
 	// scaled width and height, when they are rendered
 	public int scrScaledWidth, scrScaledHeight;
+
+	private final GuiInputHandler input = new GuiInputHandler();
+	private final List<Integer> mouseDownButtons = new ArrayList<Integer>();
 
 	// these are used to draw directly to a Graphics object
 	private BufferedImage img;
@@ -40,6 +40,10 @@ public class GUIMainPanel extends GUIPanel {
 
 	public void init(Component component) {
 		init(component, this.w, this.h);
+	}
+
+	public void removeInputListeners(Component component) {
+		input.remove(component);
 	}
 
 	public void tick() {
@@ -127,13 +131,5 @@ public class GUIMainPanel extends GUIPanel {
 
 		g.drawImage(img, x, y, scrScaledWidth, scrScaledHeight, null);
 	}
-
-//	public void removeInputListeners() {
-//		Console console = Console.instance;
-//
-//		input.remove();
-//		console.removeKeyListener(keyListener);
-//		console.removeMouseWheelListener(wheelListener);
-//	}
 
 }
