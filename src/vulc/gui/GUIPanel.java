@@ -37,6 +37,9 @@ public class GUIPanel extends GUIComponent {
 	}
 
 	public void add(GUIComponent comp) {
+		// GUIMainPanel should only be used as top-level component
+		if(comp instanceof GUIMainPanel) throw new IllegalArgumentException("Cannot add GUIMainPanel");
+
 		comps.add(comp);
 	}
 
