@@ -11,7 +11,7 @@ public abstract class GUIResources {
 	}
 
 	public static void init() {
-		init(new Font(GUIPanel.class.getResourceAsStream("/vulc/gui/fonts/tinyfont.fv4")));
+		init(new Font(GUIPanel.class.getResourceAsStream("/res/vulc/fonts/tinyfont.fv4")));
 	}
 
 }
