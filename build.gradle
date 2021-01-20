@@ -5,7 +5,7 @@ defaultTasks 'jar'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = '0.1.0-pre'
+version = '0.1.0'
 
 sourceSets {
     main.java.srcDirs 'src'
