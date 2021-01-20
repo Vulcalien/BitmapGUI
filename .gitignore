@@ -1,4 +1,12 @@
-/bin/
+### Eclipse ###
 
+/.settings/
+/bin/
 /.classpath
 /.project
+
+
+### Gradle ###
+
+/.gradle/
+/build/

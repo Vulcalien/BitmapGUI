@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+defaultTasks 'jar'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version = '0.1.0-pre'
+
+sourceSets {
+    main.java.srcDirs 'src'
+    main.resources.srcDirs 'res'
+}
+
+dependencies {
+    implementation files('libs/Bitmap-Utility-1.0.0.jar')
+}
+
+task source(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+
+    from 'LICENSE'
+}
